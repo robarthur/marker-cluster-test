@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>GeoTagged Twitter Map</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+
+
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+
+<!-- Example data. -->
+<script src="tweets.js"></script>
+
+<div id='map'></div>
+
+<script>
+L.mapbox.accessToken = 'pk.eyJ1Ijoicm9iYXJ0aHVyMSIsImEiOiI0TWNmTm93In0.bFYlgvFzkP8KqoRRK-jVqw';
+    var map = L.mapbox.map('map', 'http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png')
+        .setView([53.313719, -1.660366], 6);
+
+	L.tileLayer('http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png').addTo(map);
+	
+		var markers = new L.MarkerClusterGroup();
+    for (var i = 0; i < addressPoints.length; i++) {
+        var a = addressPoints[i];
+        var title = a[3];
+        var marker = L.marker(new L.LatLng(a[4], a[5]), {
+            icon: L.mapbox.marker.icon({'marker-symbol': 'post', 'marker-color': '0044FF'}),
+            title: title
+        });
+        marker.bindPopup("<b>@" +a[1] +"</b><br>" +title +"<br><small>" +a[0] +"</small>");
+        markers.addLayer(marker);
+    }
+
+    map.addLayer(markers);
+
+</script>
+
+
+</body>
+</html>
